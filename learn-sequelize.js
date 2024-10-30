@@ -8,6 +8,7 @@ const { Genre, Movie, Actor } = require("./models");
 */
 function insertNewGenre() {
   // Add code here
+  return Genre.create({ name: "Sci-Fi" });
 }
 
 /*
@@ -18,6 +19,7 @@ function insertNewGenre() {
 */
 function insertNewMovie() {
   // Add code here
+  return Movie.create({ title: "Inception", year: 2010 });
 }
 
 /*
@@ -25,6 +27,7 @@ function insertNewMovie() {
 */
 function getMovieWithId2() {
   // Add code here
+  return Movie.findByPk(2).then((movie) => (movie ? movie.title : null));
 }
 
 /*
@@ -32,6 +35,7 @@ function getMovieWithId2() {
 */
 function getAllActors() {
   // Add code here
+  return Actor.findAll().then((actors) => actors.map((actor) => actor.name));
 }
 
 /*
@@ -39,6 +43,9 @@ function getAllActors() {
 */
 function getAllMoviesFrom2008() {
   // Add code here
+  return Movie.findAll({ where: { year: 2008 } }).then((movies) =>
+    movies.map((movie) => movie.title)
+  );
 }
 
 /*
@@ -46,6 +53,9 @@ function getAllMoviesFrom2008() {
 */
 function deleteGenreYouAdded() {
   // Add code here
+  return Genre.findOne({ where: { name: "Sci-Fi" } }).then((genre) => {
+    if (genre) return genre.destroy();
+  });
 }
 
 /*
@@ -56,6 +66,11 @@ function deleteGenreYouAdded() {
 */
 function associateRosarioToEagleEye() {
   // Add code here
+  return Actor.findOne({ where: { name: "Rosario Dawson" } }).then((actor) => {
+    return Movie.findOne({ where: { title: "Eagle Eye" } }).then((movie) => {
+      if (actor && movie) return actor.addMovie(movie);
+    });
+  });
 }
 
 /*
@@ -66,6 +81,15 @@ function associateRosarioToEagleEye() {
 */
 async function associateRobertToTropicThunder() {
   // Add code here
+  return Actor.findOne({ where: { name: "Robert Downey Jr." } }).then(
+    (actor) => {
+      return Movie.findOne({ where: { title: "Tropic Thunder" } }).then(
+        (movie) => {
+          if (actor && movie) return actor.addMovie(movie);
+        }
+      );
+    }
+  );
 }
 
 module.exports = {
